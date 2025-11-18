@@ -1,0 +1,70 @@
+[gd_scene load_steps=12 format=3 uid="uid://c158j3w8kcvn5"]
+
+[ext_resource type="Shader" uid="uid://4d1j8hrsw2f0" path="res://POM.gdshader" id="1_mncer"]
+[ext_resource type="Texture2D" uid="uid://dfg83hg5gln0o" path="res://materials/diamond.png" id="2_cguwc"]
+[ext_resource type="Texture2D" uid="uid://d3ypacemj4qc3" path="res://materials/diamond_depth.png" id="3_go42g"]
+[ext_resource type="Texture2D" uid="uid://c4mpswca5026" path="res://materials/diamond_normal.png" id="4_sreuk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wicfy"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_go42g"]
+sky_material = SubResource("ProceduralSkyMaterial_wicfy")
+
+[sub_resource type="Environment" id="Environment_sreuk"]
+background_mode = 2
+sky = SubResource("Sky_go42g")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_cguwc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wicfy"]
+render_priority = 0
+shader = ExtResource("1_mncer")
+shader_parameter/albedo_texture = ExtResource("2_cguwc")
+shader_parameter/Use_Albedo = true
+shader_parameter/Use_Normal = false
+shader_parameter/Use_Parallax = false
+shader_parameter/height_scale = 0.05999999865888
+shader_parameter/num_layers = 64.0
+shader_parameter/scale_x = 0.0
+shader_parameter/scale_y = 0.0
+shader_parameter/scale_z = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_cguwc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cguwc"]
+render_priority = 0
+shader = ExtResource("1_mncer")
+shader_parameter/albedo_texture = ExtResource("2_cguwc")
+shader_parameter/normal_texture = ExtResource("4_sreuk")
+shader_parameter/depth_texture = ExtResource("3_go42g")
+shader_parameter/Use_Albedo = true
+shader_parameter/Use_Normal = true
+shader_parameter/Use_Parallax = true
+shader_parameter/height_scale = 0.20000000298023
+shader_parameter/num_layers = 64.0
+shader_parameter/scale_x = 3.0
+shader_parameter/scale_y = 2.0
+shader_parameter/scale_z = 1.0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_sreuk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.79970556, 0, 0.6003923, 0, 1, 0, -0.6003923, 0, -0.79970556, 1.1223354, 0.03984107, -1.2470405)
+mesh = SubResource("QuadMesh_cguwc")
+surface_material_override/0 = SubResource("ShaderMaterial_wicfy")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5151692, 0, 0.39087796)
+mesh = SubResource("BoxMesh_cguwc")
+surface_material_override/0 = SubResource("ShaderMaterial_cguwc")
